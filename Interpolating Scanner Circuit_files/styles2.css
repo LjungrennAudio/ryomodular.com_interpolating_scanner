@@ -1,0 +1,67 @@
+/* Styles for articles (Times) 				*/
+
+BODY {
+  width: 760px;
+  color: #000000; 
+  background-color: #ffffff; 
+  background-image: none;
+  font-family: Times New Roman, times, serif;
+  margin: 0px;
+  /*  border-left: solid 8px #fff088; */
+  border-left: solid 8px #f8eeac;
+}
+TD, TH {
+  font-family: times, serif; 
+  font-size: 15px;
+}
+A, A:link, .mast A:visited, .mast A:active {
+  text-decoration: none;
+  color: #333388; 
+}
+ADDRESS {
+  border-top: solid 1px #888888;
+  padding: 12px;
+  background-color: #f4ead3;
+  background-image: url(images/bg.jpeg);
+}
+H3 { 
+  font-family: times, serif; 
+  font-size: 1em;
+  color: #333333;
+}
+H2 { 
+  font-family: times, serif; 
+  font-size: 1.125em;
+  color: #333333; 
+}
+H1 {
+  font-family: times, serif; 
+  font-size: 1.25em;
+  color: #333333; 
+  text-align: center;
+}
+.text { 
+  margin-left: 36px;
+  margin-right: 36px; 
+}
+.margins {
+  margin-left: 36px;
+  margin-right: 36px; 
+}
+.article {
+  font-weight: bold; 
+}
+.sidebar {
+  text-align: center; 
+  background-color: #cccc99; 
+}
+.thinborder {
+  border-style: solid; 
+  border-width: 1px; 
+}
+.byline {
+  text-align: right;
+  padding-bottom: 4px;
+  border-bottom: solid 1px #888888;
+  margin-bottom: 20px;
+}

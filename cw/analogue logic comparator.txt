@@ -1,0 +1,8 @@
+analogue logic comparator?
+
+
+      sig in -> vca cv 
+		vca out -> vca sig in    vca out dc vary?
+other sig in -> vc  sig | dc -> vca cv in
+
+try bipolar to be sure?

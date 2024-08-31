@@ -1,0 +1,69 @@
+vcs:
+------
+
+signal	-> in	 	->	bipolar out
+
+muberrymufins.vca cv	-> both
+
+adjust 'both' ebtween approx 12-5 to get desire basic vca response as both time is cv'ed?
+
+
+------
+
+gsignal	in	->	bipolar in 	->	bipolar out
+
+vca cv		->	both cv		->	bipolar out 	->	feedback to signal in
+
+
+concept: a virtual "digital -> analogue" model  that is actally constructable in both software and hardware, with the main intention of demonstrating the operation of the analogue "Serge VCS" voltage controlled slew module, with an overarching aim to assist those with an interst in become a modular synth desinger.
+regardless of any specifc interest in desinging from angle approaching synthesis in any of:
+- a |Digital| approach, i.e. in a computer bound, code_based environment - entirely [Software];
+
+- a trickier |Digital| [Hardware] approach. e.g. [Eurorack] modules that operate using electronics/engineering that enables a [Software], i.e. still |Digital|,  code_based (and hence still very much computer bound) environment to be used to develop modules which have the added fun of |Analogue| Control_Voltages and, yes  - actual Audio_Signals. this is the entry to  a world of both the computer and real world electromangetic spectrum _( D: be. afraid. be *very* afraid^1...)_; 
+	this is where the truly creative coder comes to the forefront - how do you deal with the complexities of cramming what you thought was your beautifully compiled code that ran so well on your pc into the actual hardware ic, which ofc, contrary to the stated datashee specs inevitably consumes more power, runs hotter and performs less ably overall than all your emulation based estmations had suggested...?
+and furthermore
+
+- a Virtual |Analogue| approach. (don't even _consider_ going down this rabbithole of you really, really, dislike math. although i promise, by the time you've even gotteen slighty into the shallows of this world, if you like synthesis, code, music, analogue electronics, math, philosophy, ai, even some aspect of psychology and biology... you'll get absolutely hooked.)
+this requires employing all availble resources, effective use of latest technological advances, ability to optimise code effectively/reduce cpu loads creatively/have a perspective for firmware architectures that maximise performance, and just plain ol' flair for stuff like weird post-doc math applications to reducing utter morays of calcuations down to elegantly codable quick calculations for a co_de_based model approach that also requires a deep conceptual grasp of the mathematical infinity that is real world non-linearities. _(beware, *mind_blowing* epiphanies involving sudden realisation of the true scope of the universe may occur. you have been warned.)_;
+
+- 
+
+build for demonstration purposes/education first:
+
+
+_in simple, it's just dim ensionless binary - [0] vs [1]. in medium/advance we'll progress to dimensional binary - lo_[0] as 0Vgnd and hi_[1] as +5V. this is where well progreess into the hororrs of such realworld mess as non-square input signalshape, and touch gently on  slutions like schmitt trig mods, maybe even daring to stop stop worrying about the future - it'll get here, instead, i guess we'll dip a toe, into the begnnings of the slightly scary concept of hysteresis.
+	in the the extended level section and discussions, we travel off into using actual true analogue systems - both as 'fuzzy-logic' style analgues computers, and 	full blown serge feedback patching a la 'i lost when this stopped being a 'high/low trig in' concept and morphed into an 'audiorate ac modulation node in a network that my music pc def could not simulate... DDDD: '_
+
+
+(i) [IN]:
+simple level. [from ext. supplied - TRIG SOURCE]. medium level. [generate intrnal trig. - TRANSIENT GEN]. advanced level. [VC SLOPE GEN]. extending? [DISCUSS].
+
+- simple:	we're 'provided' a [TRIG], source for now aa non-issue. kept simple, ideal logic concept world - what is TRIG.? esplain |DIGITAL|. either its on [1],  			or it's off [0]. as simple as that. we're employing the difference these two between binary values, [1]/[0] as a trigger for our system - when it goes 			hi [0], we're saying begin the whole process, and then we go to lo [0] reaady for the next timw we want to send a clear hi [1] signal.  
+		this is going straight into (ii)_['TOGGLE'] so we gonna damn any complexities for now. maybe ease in the hint that since we dealing with electricity, 			(the signal is gonna down real patch cables, after all) and (ii)_[TOGGLE] would appreciate a nice clean signal, i.e. a square with good steep 				leading/trailing edges.
+
+	_(progress through the other simple lvl sections, (ii - vii?) so can show the most basic operation of the thing? or  proceed through medium/advanced and 		into extending levels before going to (ii onwards)...?)_
+
+- medium: 	we gonna actually go electric - [TRANSIENT GEN.] so, slight reality bite; digital isn't quite digital. oh. 
+		goodbye ideal physics, hello realworld physics: |DIGITAL| in any form of |ANALOGUE| electronics reality, even a binary one, _has_ to have an amplitude. 		...how else can a [1] vs. [0] value **difference** exist intrinsically?
+			even if lo_[0] is 0V ground; i.e. mathematical 0 value, to have a contrasting value ppreciable as hi, i.e. having a (potential)difference 			that is measurable aginst lo_[0] as hi_[1] must have a measurable value. ok, fine, for now we'll assign any old arbitrary* voltage level to be 				our hi value, since apparently _they_ don't trust us enough to have dimensionless variables in ou litttle zone of reality, sorry!. so, for now, let's 			have +5V as our hi [1] value.
+
+		not gonna make it any worse, than that for now - either the input [TRIG]_signal is at 0V_gnd i.e. lo [0]; or, it's at +5V hi [1].
+		any input to our [TRANSIENT GEN.] section currently considered as a semi-ideal concept, produces an appropriate output, as a source, internally in the 			module system, represented in our model as well. consider what the output from a feedback loop would be - for example, knowing it will very liley 		be likely from a compatible set of [within reason consider outside being ohe modules by same manurfactuer etc. as well as the same i'm std format , be created by self patching from EOC, serge style to creaate cycling behaviour - lfo etc. therefore, consider, what does EOC output that this has to be 		able to interpret as input trig? does it need any conditioning such as using amplifying/gate2trig and trig2gate/leading vs. trailing edge/squaring 			off etc. as continuation from above but therefore lead into schmitt trig conditioning.
+	- advanced: [VC SLOPE GEN] condsider and compare first what are differences of forcing all inputs to be interpreted as trigs. i.e.would give cool variations of timings etc if flipflop in correct edge trig/etc. to feed a schmitt input to the vcs normally digital dullness] slew). produces v short rise/fall output from trig in, sharp rise/fall transient in, maybe super helpful if even gates work as in trigger, also, ideally schmitt trig on 'enable' so any input signal to input will trig it and it's adjustble threshold on a disrete schmitt trig comparator so real intersting control then...
+
+
+
+(ii) ['TOGGLE']- sr flipflop/[d-type?]/SPDT toggle switch?/[div 2?]/needs enable/disable for freeze/flip.
+not doe this require vc with or just digtal ac channel passing sit i/o o/i through?, but preferably actual bidirectional that passes (audio/)varying cv - ideally bipolar both chnnels?
+
+- [vc]slew. easy done with a vcs. for educational purposes we are going to pretend the slew is [non vc]. still feel entirely unable to that it's more intersting and controllable to use a biploar vca/mix with either [single bipolar input  to the cvin /[feedback. - via bipolar oiut to [cv in].
+
+
+
+
+
+
+::i'd love to drive this as a teaching oddity for basic how serge works/patch programability/even how to build a serge from serge. 
+i.e. once you grok [slew requires merely caps and resistors to make. - just with separated equality depending on any either rir
+es/fall/both setin, so here ,ssbig on.... cheek of clapping.
+unit nera man source of income tudent dometjcg  the d unable to that it's more intersting and controllable to use a biploar vca/mix with either [single bipolar input  to the cvin /[feedback. - via bipolar oiut to [cv in].

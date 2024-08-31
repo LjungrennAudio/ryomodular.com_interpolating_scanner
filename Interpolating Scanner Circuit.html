@@ -1,0 +1,446 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0044)https://till.com/articles/scanner/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  
+  <meta name="author" content="Don Tillman">
+  <meta name="generator" content="Emacs, Macintosh">
+  <title>Interpolating Scanner Circuit</title>
+  <link href="./Interpolating Scanner Circuit_files/styles2.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<a href="https://till.com/">
+<img src="./Interpolating Scanner Circuit_files/electronicmusicarticles.gif" width="760" height="30" border="0" alt="till.com Electronic Music Articles">
+</a>
+
+<h1 align="center">Interpolating Scanner Circuit</h1>
+
+<div class="byline">
+  J. Donald Tillman<br>
+  January 1999
+</div>
+
+<div class="margins">
+
+<h2>Abstract</h2>
+
+<div class="text">
+  <p>
+  This is an original design for an interpolating scanner, a circuit
+  with a number of signal inputs, a control voltage input and a signal
+  output.  The output effectively selects between the inputs, fading
+  from one to the next, as the control voltage rises.
+
+  </p><p>
+  Prior scanner circuits include:
+  </p><ul>
+    <li>
+      the electromechanical scanner used on Hammond Organs (ref) which uses
+      capacitive coupling between spinning metal plates.
+    </li>
+    <li>
+      <a href="https://till.com/articles/scanner/index.html#juergen">Juergen Haible</a>'s interpolating scanner
+       which uses opamp circuits generating triangular windows
+      to drive current controlled amplifiers.
+    </li>
+    <li>
+      A two-channel panner circuit might be considered a degenerate form of
+      a scanner.&nbsp; The data sheet for the Precision Monolithics, Inc. 
+      <a href="https://till.com/articles/scanner/index.html#ssm-2024">SSM-2024</a> current-controlled amp IC shows a
+      stereo panner, they call it an "Exponential Cross-Fade Controller",
+      where two CCAs are controlled from a PNP differentialamp.  The circuit
+      is pretty straightforward and I'm sure similiar circuits have been
+      used before.
+    </li> 
+  </ul>
+
+  <p>
+  The circuit presented here is inspired by and similiar to JH's scanner
+  except that drive circuit is an unusual extrapolation of the
+  differential amplifier topology used in the PMI panner.  This approach
+  has some advantages:
+
+  </p><ul>
+    <li>
+      a smoother transition between inputs
+    </li>
+    <li>
+      the total drive current (the sum of all the drive currents) is from a
+      constant current source assuring that the sum of the individual gains
+      is held constant
+    </li>
+    <li>
+      low parts count
+    </li>
+    <li>
+      control of the transition shape
+    </li>
+  </ul>
+
+  <p>
+  The main disadvantage is that it requires transistor and diode
+  matching for best performance (although it seems to work pretty well
+  for unmatched devices).
+
+  </p><p>
+  The design is extendible to greater or fewer inputs.
+</p></div>
+
+<p><br>
+</p><h2>Interface Requirements</h2>
+
+<div class="text">
+  <p>
+  For this particular design I'm using the following interface specs:
+  </p><blockquote>
+    8 signal inputs.<br>
+    Signal inputs are -10 dBu, 0.7 volts p-p, 50K ohms, DC to high audio
+    (roughly 20KHz). <br>
+    Signal output is -10 dBu, 0.7 volts p-p, low impedance, DC to high
+    audio.<br>
+    Control voltage input is between -2.5 and +2.5 volts, 50K ohms, DC
+    to high audio.
+  </blockquote>
+</div>
+
+<p><br>
+</p><h2>Scanner Design</h2>
+
+<div class="text">
+  <p>
+  Figure 1 below shows a block diagram of the Interpolating Scanner.
+  There is a Current Controlled Amplifer (CCA) of traditional design for
+  each signal input.  Each CCA interfaces appropriately to the input
+  signal, has a current source output, and a gain (transconductance)
+  that is directly proportional to its control current input.  The CCA
+  outputs are summed by shorting them directly together.  A buffer
+  amplifier stage provides the appropriate output level and impedance.
+
+  </p><p>
+  </p><center>
+    <table>
+      <tbody><tr>
+	<td>
+	  <img src="./Interpolating Scanner Circuit_files/fig-block.gif" border="1" height="252" width="425" alt="Figure 1. Block diagram of the interpolating scanner">
+	</td>
+      </tr>
+      <tr>
+	<td align="center">
+	  Figure 1. Block diagram of the interpolating scanner.
+	</td>
+      </tr>
+    </tbody></table>
+  </center>
+
+  <p><br>
+  The CCAs are transconductance amplifiers; the input is a voltage, the
+  output is a current, the gain is linearly proportional to the control
+  current, and in this case the control current is expected to be from
+  0.0 to 2.0 mA.  More on this later.
+
+  </p><p>
+  Figure 2 below shows the details of the Scanner Drive circuit.<br>
+</p></div>
+</div>
+
+<div align="center">
+  <img src="./Interpolating Scanner Circuit_files/schem.gif" border="1" height="401" width="720" alt="Figure 2. Scanner drive schematic.">
+  <br clear="all">
+  Figure 2. Scanner drive schematic.
+</div>
+
+<div class="margins">
+<div class="text">
+  <p><br>
+  Figure 3 below shows schematics of the CCAs and the buffer amp.
+</p></div>
+
+<div align="center">
+  <img src="./Interpolating Scanner Circuit_files/cca-buf.gif" border="1" height="258" width="504" alt="Figure 3.  Current Controlled Amplifier and Buffer Amp.">
+  <br clear="all">
+  Figure 3.  Current Controlled Amplifier and Buffer Amp.
+</div>
+
+<p><br>
+</p><h2>Scanner Drive Theory of Operation</h2>
+
+<div class="text">
+  <p>
+  In the schematic above, the opamp provides a flexible interface to
+  the outside world (you can add multiple inputs here as well as manual
+  controls), scales the control voltage slightly, and supplies a low
+  impedance source of the control voltage to the rest of the circuit.
+
+  </p><p>
+  The issue in extending a diff amp to more than two inputs is to not
+  only gradually turn one transistor off and another on, but also turn
+  that second one off and the next one on in the same manner.
+
+  </p><p>
+  Resistors R9 through R14 provide 190mV voltage steps up from the
+  control voltage and resistors R15 through R20 provide 190mV voltages
+  steps up from ground.  The diodes select the higher of the two values.
+
+  </p><p>
+  <img src="./Interpolating Scanner Circuit_files/d1.gif" border="1" height="324" width="324" align="right" alt="Plot 1.  Resistor string voltages.">
+  Here are three plots I drew to show how this works.
+
+  </p><p>
+  The X axis is the voltage tapped off of the opamp in volts and the Y
+  axis is the various base voltages in volts.  For clarity, the base
+  voltages here are <i>before</i> the base diodes so offset everything
+  down by one diode voltage drop to get the actual base voltages.
+
+  </p><p> 
+  In the first plot we see the constant voltages presented by the
+  resistor string on the right.  These are 190 mV apart.
+  <br clear="all">
+
+  </p><p>
+  <img src="./Interpolating Scanner Circuit_files/d2.gif" border="1" height="324" width="324" align="right" alt="Plot 2.  Input signal voltages.">
+  In the second plot we also see a string of input signal voltages,
+  presented by the resistor string on the left.  These voltages are also
+  190mV apart.
+  <br clear="all">
+
+  </p><p>
+  <img src="./Interpolating Scanner Circuit_files/d3.gif" border="1" height="324" width="324" align="right" alt="Plot 3.  The effect of the diodes.">
+  In the third plot we see the effect of the diodes, selecting the most
+  positive of each of the voltage pairs.  Again, for clarity this diagram
+  shows voltages before the diode voltage drop.  Note that the extreme
+  outputs are not paired.  Also note that the voltage between crossover
+  points is two voltage steps.
+  <br clear="all">
+</p></div>
+
+<p><br>
+</p><h2>Shape Control</h2>
+
+<div class="text">
+  <p>
+  There is some control over the shape of the interpolation curve.  The
+  circuit presented above is optimized for a smooth and complete
+  transition from one stage to the next, but by varying the control
+  voltage swing and the difference between the voltage steps you can
+  customize the curves.
+
+  </p><p>
+  Here are three plots from a SPICE simulation of the scanner drive
+  circuit.  All have the input control voltage on the X axis, 1 volt per
+  division, and the individual output currents on the Y axis, 0.5mA per
+  division, with EIA colors representing output currents I1 through I8.
+
+  </p><p>
+  <img src="./Interpolating Scanner Circuit_files/simh.gif" height="137" width="218" align="right" border="1" hspace="15" vspace="15" alt="Plot with hard transitions">
+  </p><p>
+  The first plot is with double the step voltage and shows very sharp
+  transistions.  It is the scanner drive circuit above with the
+  following values changed:  
+  </p><blockquote>
+    step voltage = 380mV<br>
+    R2 = 33 k<br>
+    R4,5 = 3.3k<br>
+    R8 = 150
+  </blockquote>
+  <br clear="all">
+  <br>
+
+  <p>
+  <img src="./Interpolating Scanner Circuit_files/simn.gif" height="137" width="218" align="right" border="1" hspace="15" vspace="15" alt="Plot with medium transitions">
+
+  </p><p>
+  The second plot is the schematic above.
+  </p><blockquote>
+    step voltage = 190mV<br>
+    R4,5 = 6.8k
+  </blockquote>
+  <br clear="all">
+  <br>
+
+  <p>
+  <img src="./Interpolating Scanner Circuit_files/sims.gif" height="137" width="218" align="right" border="1" hspace="15" vspace="15" alt="Plot with very gradual transitions">
+  </p><p>
+  The third plot is with roughly half the step voltage.  Note that at the
+  extremes of the input range all of current from the current source is
+  channeled through I1 or I8, but the intermediate outputs have so much
+  spread that they steal from their neighbor's peak currents as the sum
+  current stays constant.
+  </p><blockquote>
+    step voltage = 90mV<br>
+    R2 = 33k<br>
+    R4,5 = 16k<br>
+    R8 = 620
+  </blockquote>
+  <br clear="all">
+  <br>
+
+  <p>
+  A potential strategy for an optimal shape would be to select step
+  voltage value where the I2 through I7 peak currents are 95% of the I1 
+  or I8 shelf currents; 95% percent being a somewhat arbitrarily choosen
+  value near unity.  It is possible to calculate an approximation to the
+  appropriate step voltage by solving the equation of a differential amp
+  in this situation:
+  </p><blockquote><b>
+    V<sub>step</sub> = 2 * 0.026 * ln( 2 * (R<sub>p</sub> / (1-R<sub>p</sub>)))
+  </b></blockquote>
+
+  <p>
+  Where <b><tt>V<sub>step</sub></tt></b> is the step voltage and R is
+  the ratio of the peak current of one of the intermediate outputs (I2
+  through I7) to the shelf current of the outside stages (I1, I8).  For
+  Rp = 0.95, Vstep is 190 mV, and this is the value used in the
+  schematic. 
+</p></div>
+
+<p><br>
+</p><h2>Matching Issues</h2>
+
+<div class="text">
+  <p>
+  Do the transistors in this circuit need to be matched?  Close matching
+  is not required, and depending upon the application, none may be
+  necessary.  For most electronic music applications I would suggest the
+  minimal matching procedure: check the forward voltage of the diodes
+  and the emitter-base junctions of the transistors at some low current,
+  say 100 uA, and throw out the ones with extreme numbers.
+
+  </p><p> 
+  I built a breadboard version of this circuit without matching the
+  transistors, and differences in the curves of the individual outputs
+  were visible, but not bad.  As I threw out extreme values the curves
+  matched up better.
+</p></div>
+
+<p><br>
+</p><h2>Current Controlled Amplifiers</h2>
+
+<div class="text">
+  <p>
+  The current controlled amplifiers are based on the CA3280 operational
+  transconductance amplifier (OTA).  This model was chosen because
+  </p><ul>
+    <li>
+      it has very low noise
+    </li>
+    <li>
+      it has linearizing input diodes to minimize distortion
+    </li>
+    <li>
+      it has a linear control current to gain relationship
+    </li>
+    <li>
+      the control current is referenced to near the negative supply voltage
+      <br>
+      (makes the drive circuit a little easier to design)
+    </li>
+    <li>
+      it will take a higher control current than most
+      <br>
+      (this allows LEDs to be inserted in the current control signals)
+    </li>
+  </ul>
+
+  <p>
+  In this design the input diodes are biased to 30uA which will set the amp's
+  input impedance to roughly 2.0 kohms.&nbsp; With the two 24 kohm input
+  resistors this presents at 50 kohm input resistance and an input attnuation
+  of 0.04.&nbsp; Standard -10 dBu audio signals run 0.7 v p-p and will be
+  brought down to 27mV p-p at the OTA input terminals.
+
+  </p><p>
+  The scanner drive is designed for a maximum control current of 2.0 mA,
+  high enough to directly power an low-current LED indicator in series with
+  the control current input (thanks to JH for this suggestion) as well as
+  supplying plenty of gain.
+
+  </p><p>
+  The transconductance of the CA3280 OTA is:
+  </p><blockquote><b>
+    G<sub>m</sub> = 15 * I<sub>abc</sub>
+  </b></blockquote>
+
+  So the common OTA load resistance is choosen for unity gain:
+  <blockquote><b>
+    R<sub>load</sub> = 1 / ([R<sub>d</sub> / R<sub>in(total)</sub>]) * G<sub>m(max)</sub>)
+  </b></blockquote>
+  which comes to 820 ohms.
+</div>
+
+<p><br>
+</p><h2>Additional Features</h2>
+
+<div class="text">
+  <p>
+  Control of the transition shape with a front panel knob.  This might
+  be especially useful if the scanner was going to be used as a
+  synthesizer module.  I would replace R4,5 with a current source just
+  like on the other side and run them together with a dual pot which
+  would also adjust the control voltage gain.
+
+  </p><p>
+  Stereo.  Simply double up the CCAs and buffer amps; run both sets off
+  of the same scanner drive.
+</p></div>
+
+<p><br>
+</p><h2>Applications</h2>
+
+<div class="text">
+  <p>
+  The primary application I had in mind for this device was for a modern
+  analog implementation of the Hammond Flying Chorus.  I'm currently
+  writing an article describing it.
+
+  </p><p>
+  As JH has suggested, an interpolating scanner module for a modular
+  synthesizer can be very useful both for creating waveforms and control
+  voltages.  
+</p></div>
+
+<p><br>
+</p><h2>Status</h2>
+
+<div class="text">
+  <p>
+  I have built breadboards of several versions of the scanner drive
+  circuit.  I have not built the CCAs or a whole scanner unit yet.
+  Currently I'm working on a three input scanner project.
+</p></div>
+
+<p><br>
+</p><h2>References</h2>
+<div class="text">
+  <p>
+  Hammond Organ Service Manual, 
+  <a href="http://theatreorgans.com/hammond/faq/a-100/a-100.html">
+    http://theatreorgans.com/hammond/faq/a-100/a-100.html
+  </a>
+
+  </p><p>
+  <a name="juergen"></a>
+  Juergen Haible,
+  <a href="http://home.t-online.de/home/jhaible/jh_ipscan.html">
+    Interpolating Scanner</a>, 
+  March 1998.
+
+  </p><p>
+  <a name="ssm-2024">
+  </a>
+  Precision Monolithics Inc., SSM-2024 Quad Current Controlled Amplifier
+  Data Sheet, November 1989, from PMI Data Book, Volume 10, Analog
+  Integrated Circuits, 1990.
+</p></div>
+
+</div>
+
+<address>
+  Copyright 1999 J. Donald Tillman<br>
+  email: don@till.com<br>
+  web page: <a href="https://till.com/">till.com</a>
+</address>
+
+
+
+</body></html>
